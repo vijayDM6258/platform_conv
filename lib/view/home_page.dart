@@ -1,8 +1,10 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:platform_conv/provider/home_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -19,39 +21,162 @@ class _HomePageState extends State<HomePage> {
     var isAndroid = Provider.of<HomeProvider>(context, listen: false).isAndroid;
     if (isAndroid) {
       return Scaffold(
-        appBar: AppBar(
-          actions: [
-            Consumer<HomeProvider>(
-              builder: (context, homeProvider, child) {
-                return Switch(
-                  value: homeProvider.isAndroid,
-                  onChanged: (value) {
-                    homeProvider.change();
-                  },
+        // appBar: AppBar(
+        //   actions: [
+        //     Consumer<HomeProvider>(
+        //       builder: (context, homeProvider, child) {
+        //         return Switch(
+        //           value: homeProvider.isAndroid,
+        //           onChanged: (value) {
+        //             homeProvider.change();
+        //           },
+        //         );
+        //       },
+        //     ),
+        //   ],
+        // ),
+        body: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              title: Text("Hello"),
+              pinned: true,
+              expandedHeight: 250,
+              flexibleSpace: FlexibleSpaceBar(
+                expandedTitleScale: 250,
+                collapseMode: CollapseMode.parallax,
+                background: Image.network(
+                    "https://www.daily.co/blog/content/images/2023/07/Flutter-feature.png"),
+              ),
+            ),
+            SliverGrid.builder(
+              // gridDelegate:
+              //     SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+              gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                maxCrossAxisExtent: 400,
+              ),
+              itemCount: 4,
+              itemBuilder: (context, index) {
+                int r = Random().nextInt(255);
+                int g = Random().nextInt(255);
+                int b = Random().nextInt(255);
+                return Container(
+                  color: Color.fromARGB(255, r, g, b),
                 );
               },
             ),
-          ],
-        ),
-        body: Column(
-          children: [
-            CupertinoButton.filled(
-              child: Text("Ok"),
-              onPressed: () {},
+            SliverToBoxAdapter(
+              child: Column(
+                children: [
+                  ElevatedButton(
+                      onPressed: () {
+                        showDatePicker(
+                          context: context,
+                          firstDate: DateTime(2000),
+                          lastDate: DateTime(2050),
+                        ).then((value) {
+                          print("date==> $value");
+                        });
+                      },
+                      child: Text("Select Date")),
+                  ElevatedButton(
+                      onPressed: () {
+                        showTimePicker(
+                          context: context,
+                          initialTime: TimeOfDay.now(),
+                        ).then((value) {
+                          print("date==> $value");
+                        });
+                      },
+                      child: Text("Select Time")),
+                  MyButton(),
+                  SizedBox(
+                    height: 300,
+                    child: CupertinoDatePicker(
+                      use24hFormat: true,
+                      mode: CupertinoDatePickerMode.time,
+                      onDateTimeChanged: (value) {
+                        print("object $value");
+                      },
+                    ),
+                  ),
+                ],
+              ),
             ),
-            CupertinoActivityIndicator(
-              color: Color(0xff72a4d6),
+            SliverList(
+              delegate: SliverChildListDelegate(
+                [
+                  Text("item 1"),
+                  Text("item 1"),
+                ],
+              ),
             ),
-            CircularProgressIndicator(
-              value: 0.6,
-              // color: Color(0xff72a4d6),
-              // color: Color.fromARGB(200, 114, 164, 214),
-              // color: Color.fromRGBO(114, 164, 214, 0.5),
+            SliverList(
+              delegate: SliverChildBuilderDelegate((context, index) {
+                return Text("data $index");
+              }, childCount: 15),
+            ),
+            SliverGrid(
+              delegate: SliverChildListDelegate(
+                [
+                  Text("item 1"),
+                  Text("item 1"),
+                  Text("item 1"),
+                  Text("item 1"),
+                  Text("item 1"),
+                  Text("item 1"),
+                ],
+              ),
+              gridDelegate:
+                  SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
+            ),
+            SliverAppBar(
+              title: Text("Hello"),
+              pinned: true,
+            ),
+            SliverList(
+              delegate: SliverChildListDelegate(
+                [
+                  Text("item 1"),
+                  Text("item 1"),
+                  Text("item 1"),
+                  Text("item 1"),
+                  Text("item 1"),
+                  Text("item 1"),
+                ],
+              ),
+            ),
+            SliverGrid(
+              delegate: SliverChildListDelegate(
+                [
+                  Text("item 1"),
+                  Text("item 1"),
+                  Text("item 1"),
+                  Text("item 1"),
+                  Text("item 1"),
+                  Text("item 1"),
+                  Text("item 1"),
+                  Text("item 1"),
+                  Text("item 1"),
+                  Text("item 1"),
+                  Text("item 1"),
+                  Text("item 1"),
+                  Text("item 1"),
+                  Text("item 1"),
+                  Text("item 1"),
+                  Text("item 1"),
+                  Text("item 1"),
+                  Text("item 1"),
+                ],
+              ),
+              gridDelegate:
+                  SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
             )
           ],
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            print("Add ");
+          },
         ),
       );
     } else {
@@ -77,5 +202,76 @@ class _HomePageState extends State<HomePage> {
         ),
       );
     }
+  }
+}
+
+class MyButton extends StatefulWidget {
+  const MyButton({super.key});
+
+  @override
+  State<MyButton> createState() => _MyButtonState();
+}
+
+class _MyButtonState extends State<MyButton> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        ElevatedButton(
+            onPressed: () {
+              showBottomSheet(
+                context: context,
+                builder: (context) {
+                  return Container(
+                    height: 250,
+                    width: double.infinity,
+                    color: Colors.red.shade50,
+                    child: Column(
+                      children: [
+                        Text("Title"),
+                        Text("Detail"),
+                      ],
+                    ),
+                  );
+                },
+              );
+            },
+            child: Text("ShowBottomSheet")),
+        ElevatedButton(
+            onPressed: () {
+              showModalBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                useSafeArea: true,
+                isDismissible: false,
+                enableDrag: false,
+                barrierColor: Colors.red,
+                builder: (context) {
+                  return SafeArea(
+                    child: Container(
+                      height: 600,
+                      child: SingleChildScrollView(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              "Title",
+                              style: TextStyle(fontSize: 32),
+                            ),
+                            Text(
+                              "Detail" * 10,
+                              style: TextStyle(fontSize: 32),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              );
+            },
+            child: Text("ShowModalBottomSheet")),
+      ],
+    );
   }
 }
