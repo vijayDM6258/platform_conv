@@ -2,9 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:platform_conv/provider/detail_provider.dart';
 import 'package:platform_conv/provider/home_provider.dart';
+import 'package:platform_conv/provider/main_provider.dart';
 import 'package:platform_conv/util/routes_name.dart';
 import 'package:platform_conv/view/detail_page.dart';
 import 'package:platform_conv/view/home_page.dart';
+import 'package:platform_conv/view/main_page.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -24,6 +26,7 @@ class _MyAppState extends State<MyApp> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => HomeProvider()),
+        ChangeNotifierProvider(create: (context) => MainProvider()),
         ChangeNotifierProvider(
           create: (context) => DetailProvider(),
         )
@@ -37,6 +40,7 @@ class _MyAppState extends State<MyApp> {
                 routes: {
                   RoutesName.homePage: (context) => HomePage(),
                   RoutesName.detailPage: (context) => DetailPage(),
+                  RoutesName.mainPage: (context) => MainPage(),
                 },
               )
             : CupertinoApp(
@@ -44,6 +48,7 @@ class _MyAppState extends State<MyApp> {
                 routes: {
                   RoutesName.homePage: (context) => HomePage(),
                   RoutesName.detailPage: (context) => DetailPage(),
+                  RoutesName.mainPage: (context) => MainPage(),
                 },
               );
       },

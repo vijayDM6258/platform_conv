@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:platform_conv/provider/home_provider.dart';
+import 'package:platform_conv/util/routes_name.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
@@ -88,6 +89,53 @@ class _HomePageState extends State<HomePage> {
                         });
                       },
                       child: Text("Select Time")),
+                  CupertinoContextMenu(
+                    actions: [
+                      CupertinoContextMenuAction(
+                        child: Text("Item 1"),
+                        isDefaultAction: true,
+                      ),
+                      CupertinoContextMenuAction(child: Text("Item 2")),
+                      CupertinoContextMenuAction(
+                        child: Text("cancel"),
+                        isDestructiveAction: true,
+                      ),
+                    ],
+                    child: Container(
+                      padding: EdgeInsets.all(50),
+                      child: Image.network(
+                          "https://www.daily.co/blog/content/images/2023/07/Flutter-feature.png"),
+                    ),
+                  ),
+                  IconButton(
+                      onPressed: () {
+                        showCupertinoModalPopup(
+                          context: context,
+                          builder: (context) {
+                            return CupertinoActionSheet(
+                              title: Text("Title"),
+                              message: Text("Details"),
+                              actions: [
+                                CupertinoActionSheetAction(
+                                  onPressed: () {},
+                                  child: Text("Item 1"),
+                                  isDefaultAction: true,
+                                ),
+                                CupertinoActionSheetAction(
+                                    onPressed: () {}, child: Text("Item 2")),
+                                CupertinoActionSheetAction(
+                                  onPressed: () {},
+                                  child: Text("Remove"),
+                                  isDestructiveAction: true,
+                                )
+                              ],
+                              cancelButton: CupertinoActionSheetAction(
+                                  onPressed: () {}, child: Text("Remove")),
+                            );
+                          },
+                        );
+                      },
+                      icon: Icon(Icons.add)),
                   MyButton(),
                   SizedBox(
                     height: 300,
@@ -175,7 +223,7 @@ class _HomePageState extends State<HomePage> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            print("Add ");
+            Navigator.pushNamed(context, RoutesName.mainPage);
           },
         ),
       );
