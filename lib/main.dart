@@ -36,7 +36,7 @@ class _MyAppState extends State<MyApp> {
         var isAndroid = Provider.of<HomeProvider>(context).isAndroid;
         return isAndroid
             ? MaterialApp(
-                initialRoute: RoutesName.homePage,
+                initialRoute: RoutesName.mainPage,
                 routes: {
                   RoutesName.homePage: (context) => HomePage(),
                   RoutesName.detailPage: (context) => DetailPage(),
@@ -44,7 +44,7 @@ class _MyAppState extends State<MyApp> {
                 },
               )
             : CupertinoApp(
-                initialRoute: RoutesName.homePage,
+                initialRoute: RoutesName.mainPage,
                 routes: {
                   RoutesName.homePage: (context) => HomePage(),
                   RoutesName.detailPage: (context) => DetailPage(),
