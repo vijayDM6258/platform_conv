@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:platform_conv/provider/home_provider.dart';
 import 'package:platform_conv/provider/main_provider.dart';
+import 'package:platform_conv/view/cupertino_call_com.dart';
 import 'package:provider/provider.dart';
 
 class MainPage extends StatefulWidget {
@@ -74,12 +75,17 @@ class _MainPageState extends State<MainPage> {
             ),
             Container(
               color: Colors.yellow,
+              child: Text(
+                "Setting Page",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
             )
           ],
         ),
       );
     } else {
       return CupertinoTabScaffold(
+        backgroundColor: Colors.blue.shade100,
         tabBar: CupertinoTabBar(
           items: [
             BottomNavigationBarItem(icon: Icon(CupertinoIcons.home)),
@@ -91,74 +97,73 @@ class _MainPageState extends State<MainPage> {
         tabBuilder: (context, index) {
           return CupertinoTabView(
             builder: (context) {
-              // return Text("inded $index");
-              return SafeArea(
-                child: Column(
-                  children: [
-                    Text("Ios"),
-                    // Switch.adaptive(
-                    //   value: true,
-                    //   onChanged: (value) {},
-                    // ),
-                    CupertinoSlider(
-                      value: 0.3,
-                      min: 0,
-                      max: 500,
-                      onChanged: (value) {
-                        print("CupertinoSlider $value");
-                      },
+              if (index == 1) {
+                return CupertinoCall();
+              } else {
+                return SafeArea(
+                    child: CustomScrollView(
+                  slivers: [
+                    CupertinoSliverNavigationBar(
+                      largeTitle: Text("Welcome"),
+                      middle: Text("Hello"),
+                      alwaysShowMiddle: false,
                     ),
-                    // Slider.adaptive(
-                    //   value: 0.3,
-                    //   onChanged: (value) {},
-                    // ),
-                    Consumer<MainProvider>(
-                      builder: (context, mainProvider, child) {
-                        return CupertinoSegmentedControl<int>(
-                          groupValue: mainProvider.itemSelect,
-                          children: {
-                            1: Text("Call"),
-                            2: Text("missed"),
-                          },
-                          onValueChanged: (value) {
-                            mainProvider.changeItem1(value);
-                            print("object $value");
-                          },
-                        );
-                      },
-                    ),
-
-                    Consumer<MainProvider>(
-                      builder: (context, mainProvider, child) {
-                        return CupertinoSlidingSegmentedControl<String>(
-                          groupValue: mainProvider.item2Select,
-                          children: {
-                            "call": Text("CAlls"),
-                            "ms": Text("Misssed Call"),
-                          },
-                          onValueChanged: (value) {
-                            mainProvider.changeItem2(value ?? "call");
-                            print("CupertinoSlidingSegmentedControl $value");
-                          },
-                        );
-                      },
-                    ),
-
-                    Consumer<HomeProvider>(
-                      builder: (context, homeProvider, child) {
-                        return CupertinoSwitch(
-                          value: homeProvider.isAndroid,
-                          activeColor: Colors.red,
-                          trackColor: Colors.black,
-                          onChanged: (value) {
-                            homeProvider.change();
-                          },
-                        );
-                      },
+                    SliverFillRemaining(
+                      child: Column(
+                        children: [
+                          CupertinoListSection(
+                            dividerMargin: 20,
+                            header: Text("Setting"),
+                            footer: Text("v 1.0.0 - 1"),
+                            separatorColor: Colors.red,
+                            hasLeading: false,
+                            children: [
+                              CupertinoListTile(
+                                title: Text("Language"),
+                                additionalInfo: Text("Wifi"),
+                                trailing: Icon(Icons.arrow_forward_ios),
+                              ),
+                              CupertinoListTile(title: Text("General")),
+                              CupertinoListTile(title: Text("Time")),
+                            ],
+                          ),
+                          CupertinoButton(
+                            child: Text("Click"),
+                            onPressed: () {},
+                          ),
+                          CupertinoButton.filled(
+                            child: Text("Click 1"),
+                            onPressed: () {},
+                          ),
+                          CupertinoListSection.insetGrouped(
+                            backgroundColor: Colors.redAccent,
+                            children: [
+                              CupertinoListTile(
+                                title: Text("Language"),
+                                additionalInfo: Text("Wifi"),
+                                trailing: Icon(Icons.arrow_forward_ios),
+                              ),
+                              CupertinoListTile(title: Text("General")),
+                              CupertinoListTile(title: Text("Time")),
+                            ],
+                          ),
+                          ListView.builder(
+                            itemCount: 3,
+                            shrinkWrap: true,
+                            physics: ClampingScrollPhysics(),
+                            itemBuilder: (context, index) {
+                              return CupertinoListTile(
+                                title: Text("Abc"),
+                                subtitle: Text("+91 4579846134"),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
                     )
                   ],
-                ),
-              );
+                ));
+              }
             },
           );
         },
